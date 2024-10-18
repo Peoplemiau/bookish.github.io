@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Видеохостинговая Платформа</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f5;
+            margin: 0;
+            padding: 20px;
+        }
+        header {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .upload-section, .videos-section {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .upload-section h2, .videos-section h2 {
+            margin-top: 0;
+        }
+        .videos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        .video-item {
+            background-color: #fafafa;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
+        }
+        video {
+            width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .upload-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .upload-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <!-- Firebase App (the core Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <!-- Firebase Storage -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+    <!-- Firebase Database -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+</head>
+<body>
+
+    <header>
+        <h1>Видеохостинговая Платформа</h1>
+    </header>
+
+    <div class="upload-section">
+        <h2>Загрузить Видео</h2>
+        <input type="file" id="videoUpload" accept="video/*">
+        <br>
+        <button class="upload-button" id="uploadButton">Загрузить</button>
+    </div>
+
+    <div class="videos-section">
+        <h2>Доступные Видео</h2>
+        <div class="videos-grid" id="videosGrid">
+            <!-- Видео будут загружены сюда -->
+        </div>
+    </div>
+
+    <script>
+        // Настройка Firebase
+        const firebaseConfig = {
+            apiKey: "ВАШ_API_KEY",
+            authDomain: "ВАШ_AUTH_DOMAIN",
+            projectId: "ВАШ_PROJECT_ID",
+            storageBucket: "ВАШ_STORAGE_BUCKET",
+            messagingSenderId: "ВАШ_MESSAGING_SENDER_ID",
+            appId: "ВАШ_APP_ID",
+            databaseURL: "ВАШ_DATABASE_URL"
+        };
+
+        // Инициализация Firebase
+        firebase.initializeApp(firebaseConfig);
+        const storage = firebase.storage();
+        const database = firebase.database();
+
+        const uploadButton = document.getElementById('uploadButton');
+        const videoUpload = document.getElementById('videoUpload');
+        const videosGrid = document.getElementById('videosGrid');
+
+        uploadButton.addEventListener('click', () => {
+            const file = videoUpload.files[0];
+            if (!file) {
+                alert("Пожалуйста, выберите видео для загрузки.");
+                return;
+            }
+
+            const storageRef = storage.ref('videos/' + file.name);
+            const uploadTask = storageRef.put(file);
+
+            uploadTask.on('state_changed', 
+                (snapshot) => {
+                    // Можно реализовать индикатор загрузки
+                }, 
+                (error) => {
+                    console.error("Ошибка загрузки:", error);
+                }, 
+                () => {
+                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+                        const videoData = {
+                            name: file.name,
+                            url: downloadURL
+                        };
+                        const newVideoKey = database.ref().child('videos').push().key;
+                        database.ref('videos/' + newVideoKey).set(videoData);
+                    });
+                }
+            );
+        });
+
+        // Функция для отображения видео
+        function displayVideo(video) {
+            const videoDiv = document.createElement('div');
+            videoDiv.className = 'video-item';
+
+            const videoElement = document.createElement('video');
+            videoElement.src = video.url;
+            videoElement.controls = true;
+            videoElement.alt = video.name;
+            videoElement.width = 300;
+            videoElement.height = 200;
+
+            videoDiv.appendChild(videoElement);
+            videosGrid.appendChild(videoDiv);
+        }
+
+        // Загрузка и отображение видео из базы данных
+        database.ref('videos').on('value', (snapshot) => {
+            videosGrid.innerHTML = '';
+            snapshot.forEach((childSnapshot) => {
+                const video = childSnapshot.val();
+                displayVideo(video);
+            });
+        });
+    </script>
+
+</body>
+</html>
