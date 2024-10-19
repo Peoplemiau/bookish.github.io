@@ -1,358 +1,111 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru" class="scroll-smooth" style="background:#202124">
 <head>
-  <base href="https://every-ai-chat-free.com/">
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ORKGPT</title>
+  <!-- Метаданные и предзагрузка ресурсов вашего основного сайта -->
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width"/>
+  <meta name="theme-color" content="#FFFFFF"/>
+  <title>ChatGPT на русском: вход в ChatGPT онлайн MashaGPT</title>
+  <meta name="description" content="ChatGPT на русском: вход или регистрация. Сервис по работе с ChatGPT — №1 для пользователей из России. ChatGPT-4o-mini/4o онлайн на русском. Работает без VPN. Напишет вам тексты, эссе и код для программистов. Отвечает на вопросы, создаёт идеи и изображения. Бесплатные генерации каждый день."/>
+  <!-- Остальные метатеги и предзагрузка ресурсов -->
 
-  <!-- Include highlight.js styles -->
-  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
+  <!-- Подключение стилей вашего основного сайта -->
+  <link rel="stylesheet" href="/_next/static/css/90c42edd01ebbd91.css" data-n-g=""/>
+  <link rel="stylesheet" href="/_next/static/css/d9322df4fe06496f.css" data-n-p=""/>
   
+  <!-- Подключение стилей чата ORKGPT -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
   <style>
-    /* Ваши стили остаются без изменений */
-    body, html {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #1a1a1a;
-      color: #e0e0e0;
-      height: 100%;
-      overflow: hidden;
-    }
-
+    /* Стили чата ORKGPT */
+    /* (Скопируйте сюда все стили из первого HTML-кода) */
+    /* Пример: */
     .container {
       display: flex;
       height: 100vh;
       width: 100vw;
     }
-
-    .sidebar {
-      width: 220px;
-      min-width: 220px;
-      background-color: #2c2c2c;
-      color: #e0e0e0;
-      padding: 15px;
-      overflow-y: auto;
-      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
-    }
-
-    .main-content {
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
-      padding: 20px;
-      overflow-y: auto;
-      background-color: #1a1a1a;
-    }
-
-    .header {
-      text-align: center;
-      margin-bottom: 15px;
-      color: #e0e0e0;
-      position: relative;
-    }
-
-    .header h1 {
-      margin: 0;
-      font-size: 24px;
-      font-weight: normal;
-    }
-
-    .chat-area {
-      flex-grow: 1;
-      background-color: #2a2a2a;
-      border-radius: 4px;
-      padding: 10px;
-      overflow-y: auto;
-      margin-bottom: 15px;
-      color: #e0e0e0;
-    }
-
-    .footer {
-      text-align: center;
-      font-size: 12px;
-      color: #a0a0a0;
-      margin-top: 10px;
-    }
-
-    #userInput {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      background-color: #333333;
-      color: #e0e0e0;
-      border: 1px solid #444444;
-      border-radius: 4px;
-      resize: vertical;
-      min-height: 40px;
-      max-height: 150px;
-      font-size: 14px;
-    }
-
-    #sendButton, #uploadButton {
-      width: 100%;
-      padding: 10px;
-      background-color: #006bb3;
-      color: #ffffff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
-
-    #sendButton:hover, #uploadButton:hover {
-      background-color: #005a99;
-    }
-
-    #modelSelect {
-      width: 100%;
-      padding: 8px;
-      margin-bottom: 10px;
-      background-color: #333333;
-      color: #e0e0e0;
-      border: 1px solid #444444;
-      border-radius: 4px;
-      font-size: 14px;
-    }
-
-    .created-by {
-      position: absolute;
-      bottom: 10px;
-      right: 15px;
-      font-size: 12px;
-      color: #a0a0a0;
-    }
-
-    .message {
-      margin-bottom: 10px;
-      padding: 8px;
-      border-radius: 4px;
-      word-wrap: break-word;
-      white-space: pre-wrap;
-      background-color: #1a1a1a;
-      border-left: 4px solid #006bb3;
-    }
-
-    .user {
-      background-color: #333333;
-      border-left-color: #006bb3;
-    }
-
-    .assistant {
-      background-color: #2a2a2a;
-      border-left-color: #ff9900;
-    }
-
-    .system {
-      background-color: #2a2a2a;
-      font-style: italic;
-      border-left-color: #999999;
-    }
-
-    .message code {
-      background-color: #1a1a1a;
-      padding: 2px 4px;
-      border-radius: 3px;
-      font-family: 'Courier New', Courier, monospace;
-      color: #ff9900;
-    }
-
-    .message pre code {
-      display: block;
-      padding: 10px;
-      background-color: #1a1a1a;
-      overflow-x: auto;
-      color: #ff9900;
-    }
-
-    .loading-spinner {
-      display: inline-block;
-      width: 16px;
-      height: 16px;
-      border: 2px solid #ffffff;
-      border-radius: 50%;
-      border-top: 2px solid #006bb3;
-      animation: spin 1s linear infinite;
-      vertical-align: middle;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    .chat-history-item {
-      cursor: pointer;
-      padding: 8px;
-      margin-bottom: 5px;
-      background-color: #3a3a3a;
-      border-radius: 4px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      transition: background-color 0.3s ease;
-      font-size: 14px;
-    }
-
-    .chat-history-item:hover {
-      background-color: #4a4a4a;
-    }
-
-    .chat-history-item.selected {
-      background-color: #4a4a4a;
-    }
-
-    .chat-history-buttons {
-      display: flex;
-      gap: 5px;
-    }
-
-    .chat-history-button {
-      background-color: #555555;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      padding: 2px 5px;
-      font-size: 10px;
-      cursor: pointer;
-    }
-
-    .chat-history-button:hover {
-      background-color: #777777;
-    }
-
-    .new-chat-button {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      background-color: #006bb3;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      font-size: 14px;
-    }
-
-    .new-chat-button:hover {
-      background-color: #005a99;
-    }
-
-    #debugButton {
-      position: absolute;
-      top: 10px;
-      right: 15px;
-      background-color: #555555;
-      color: white;
-      border: none;
-      border-radius: 3px;
-      padding: 5px 10px;
-      font-size: 12px;
-      cursor: pointer;
-    }
-
-    #debugButton:hover {
-      background-color: #777777;
-    }
-
-    .eyeball-button {
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-size: 14px;
-      padding: 0 3px;
-      color: #e0e0e0;
-    }
-
-    .popup {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: #2a2a2a;
-      padding: 20px;
-      border-radius: 4px;
-      z-index: 1000;
-      max-width: 80%;
-      max-height: 80%;
-      overflow-y: auto;
-      box-shadow: 0 0 10px rgba(0,0,0,0.7);
-    }
-
-    .popup-content {
-      color: #e0e0e0;
-      white-space: pre-wrap;
-      font-size: 14px;
-    }
-
-    .close-popup {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: none;
-      border: none;
-      color: white;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.6);
-      z-index: 999;
-    }
+    /* Добавьте остальные стили... */
+    
+    /* Убедитесь, что стили не конфликтуют с основным сайтом */
   </style>
 </head>
-<body>
-  <div class="container">
-    <div class="sidebar">
-      <button class="new-chat-button" id="newChatButton">New Chat</button>
-      <div id="chatHistory"></div>
+<body class="scrollbar bg-surface-primary-default scrollbar-thumb-st-secondary scrollbar-track scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-w-[6px]">
+  <div id="__next">
+    <!-- Структура вашего основного сайта -->
+    <!-- ... -->
+
+    <!-- Место для интеграции чата -->
+    <div class="container">
+      <div class="sidebar">
+        <button class="new-chat-button" id="newChatButton">New Chat</button>
+        <div id="chatHistory"></div>
+      </div>
+      <div class="main-content">
+        <div class="header">
+          <h1>ORKGPT</h1>
+          <button id="debugButton">Debug</button>
+        </div>
+        <div class="chat-area" id="chat-area">
+          <!-- Chat messages will be inserted here -->
+        </div>
+        <textarea id="userInput" placeholder="Type your message here..."></textarea>
+        <button id="sendButton">Send</button>
+        <!-- File upload button -->
+        <input type="file" id="fileInput" style="display: none;" multiple />
+        <button id="uploadButton">Upload Files</button>
+        <select id="modelSelect">
+          <option value="">Loading models...</option>
+        </select>
+        <div class="footer">
+          ORKGPT. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.
+        </div>
+        <div class="created-by">Created by @laznin ⚡</div>
+      </div>
     </div>
-    <div class="main-content">
-      <div class="header">
-        <h1>ORKGPT</h1>
-        <button id="debugButton">Debug</button>
-      </div>
-      <div class="chat-area" id="chat-area">
-        <!-- Chat messages will be inserted here -->
-      </div>
-      <textarea id="userInput" placeholder="Type your message here..."></textarea>
-      <button id="sendButton">Send</button>
-      <!-- File upload button -->
-      <input type="file" id="fileInput" style="display: none;" multiple />
-      <button id="uploadButton">Upload Files</button>
-      <select id="modelSelect">
-        <option value="">Loading models...</option>
-      </select>
-      <div class="footer">
-        ORKGPT. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.
-      </div>
-      <div class="created-by">Created by @laznin ⚡</div>
+
+    <!-- Остальная часть вашего основного сайта -->
+    <!-- ... -->
+
+    <!-- Всплывающие окна и оверлей -->
+    <div id="overlay" class="overlay"></div>
+    <div id="popup" class="popup">
+      <button class="close-popup" onclick="closePopup()">×</button>
+      <div id="popupContent" class="popup-content"></div>
     </div>
   </div>
 
-  <div id="overlay" class="overlay"></div>
-  <div id="popup" class="popup">
-    <button class="close-popup" onclick="closePopup()">×</button>
-    <div id="popupContent" class="popup-content"></div>
-  </div>
+  <!-- Подключение скриптов вашего основного сайта -->
+  <script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" defer></script>
+  <script src="./main.js" async defer data-nscript="beforeInteractive"></script>
+  <script src="/_next/static/chunks/webpack-b44dedb1f244bb41.js" defer></script>
+  <script src="/_next/static/chunks/framework-b0ec748c7a4c483a.js" defer></script>
+  <script src="/_next/static/chunks/main-29a491a23e8fc869.js" defer></script>
+  <script src="/_next/static/chunks/pages/_app-0b8f0acbc034d1fa.js" defer></script>
+  <script src="/_next/static/chunks/0f4ba5df-829aa9708f446b36.js" defer></script>
+  <script src="/_next/static/chunks/175675d1-a1a6b6f4df43b8f4.js" defer></script>
+  <script src="/_next/static/chunks/31d4e3d1-51085b68e92f5fd1.js" defer></script>
+  <script src="/_next/static/chunks/6132-32a6ce0320c3dd32.js" defer></script>
+  <script src="/_next/static/chunks/7311-6da058c6ffeadead.js" defer></script>
+  <script src="/_next/static/chunks/6753-1b841bad857904f7.js" defer></script>
+  <script src="/_next/static/chunks/1819-12e58a6a2643ddd3.js" defer></script>
+  <script src="/_next/static/chunks/8732-f22ddc8a7ce35370.js" defer></script>
+  <script src="/_next/static/chunks/6222-4bfcb633d558ff3d.js" defer></script>
+  <script src="/_next/static/chunks/2178-ee0c9fa8c6342fd5.js" defer></script>
+  <script src="/_next/static/chunks/3787-df99eeb3338906ca.js" defer></script>
+  <script src="/_next/static/chunks/pages/rustore/chat-a05e7ac1af67de5a.js" defer></script>
+  <script src="/_next/static/z6UmvOchI6o3SAv9J-per/_buildManifest.js" defer></script>
+  <script src="/_next/static/z6UmvOchI6o3SAv9J-per/_ssgManifest.js" defer></script>
 
-  <!-- Include highlight.js script -->
+  <!-- Подключение скриптов чата ORKGPT -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
   <script>
-    // Initialize highlight.js
+    // Инициализация highlight.js
     hljs.highlightAll();
   </script>
-
   <script>
+    // Ваши скрипты для чата ORKGPT
+    // (Скопируйте сюда весь JavaScript из первого HTML-кода)
+    // Пример:
     const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting. Use fractions instead of decimal numbers where applicable. Do not alter code blocks.`;
     let selectedModel = '';
     let currentChatId = null;
