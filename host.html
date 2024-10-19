@@ -1,165 +1,1048 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Видеохостинговая Платформа</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f5;
-            margin: 0;
-            padding: 20px;
+<html><head><base href="woah.. i can put anything here :33333">
+<title>БуфХол - Совсем Не Твиттер™️</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+<style>
+  body {
+        font-family: 'Poppins', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f2f5;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+    #debug-log {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+        margin-top: 20px;
+        font-family: monospace;
+        font-size: 12px;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+    .scrolling-banner {
+        font-family: 'Poppins', sans-serif;
+        background-color: #f0f2f5;
+        overflow: hidden;
+        white-space: nowrap;
+        padding: 10px 0;
+        position: relative;
+    }
+    .scrolling-text {
+        display: inline-block;
+        min-width: 200%; /* Increase to accommodate duplicated content */
+        animation: scroll 120s linear infinite; /* Slower scrolling */
+        font-family: 'Poppins', sans-serif; /* Ensure Poppins font is applied */
+        will-change: transform;
+    }
+    .scrolling-banner .scrolling-text:nth-child(2) {
+        animation-delay: -120s; /* Matches the animation duration */
+    }
+    @keyframes scroll {
+        from {
+            transform: translateX(0);
         }
-        header {
-            text-align: center;
-            padding: 20px 0;
-            background-color: #4CAF50;
-            color: white;
-            border-radius: 8px;
-            margin-bottom: 20px;
+        to {
+            transform: translateX(-50%);
         }
-        .upload-section, .videos-section {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .upload-section h2, .videos-section h2 {
-            margin-top: 0;
-        }
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-        }
-        .video-item {
-            background-color: #fafafa;
-            padding: 10px;
-            border-radius: 8px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
-        }
-        video {
-            width: 100%;
-            height: auto;
-            border-radius: 4px;
-        }
-        .upload-button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-        .upload-button:hover {
-            background-color: #45a049;
-        }
-    </style>
-    <!-- Firebase App (the core Firebase SDK) -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <!-- Firebase Storage -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
-    <!-- Firebase Database -->
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+    }
+    .container {
+        max-width: 600px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 20px;
+        box-sizing: border-box;
+        flex-grow: 1;
+        padding-top: 10px;
+    }
+    header {
+        background-color: #1da1f2;
+        color: white;
+        padding: 15px 0;
+        text-align: center;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    header h1 {
+        margin: 0;
+        font-size: 24px;
+    }
+    header .author {
+        font-size: 16px;
+        opacity: 0.7;
+    }
+    .warning-bar {
+        background-color: #ffeb3b;
+        color: #000000;
+        text-align: center;
+        padding: 10px 40px 10px 20px;
+        font-weight: bold;
+        font-size: 14px;
+        border-top: 1px solid #ccc;
+        position: relative;
+    }
+    .warning-bar .dismiss-button {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: #ffffff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .post-form {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    .post-form textarea {
+        width: 100%;
+        height: 100px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        resize: none;
+        font-size: 16px;
+        box-sizing: border-box;
+        maxlength: 100000;
+    }
+    .post-form button {
+        background-color: #1da1f2;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        float: right;
+        transition: background-color 0.3s;
+    }
+    .post-form button:hover {
+        background-color: #1991db;
+    }
+    .post {
+        background-color: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+    }
+    .post .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .post .user-info img {
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+    }
+    .post .user-info .username {
+        font-weight: bold;
+        font-size: 16px;
+    }
+    .post .following-indicator {
+        font-size: 12px;
+        color: #1da1f2;
+        opacity: 0.7;
+        margin-left: 5px;
+    }
+    .post .repost-info {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+    .post .quote-post {
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: 4px;
+        padding: 10px;
+        margin-bottom: 10px;
+        font-size: 14px;
+    }
+    .post .quote-user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .post .quote-user-info img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    .post .quote-content {
+        font-style: italic;
+    }
+    .post .content {
+        margin-bottom: 15px;
+        font-size: 18px;
+        line-height: 1.4;
+    }
+    .post .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .post .actions .left-buttons {
+        display: flex;
+        gap: 15px;
+    }
+    .post .actions button {
+        background-color: transparent;
+        border: none;
+        color: #657786;
+        cursor: pointer;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+    }
+    .post .actions button:hover {
+        color: #1da1f2;
+    }
+    .post .actions button.liked {
+        color: #e0245e;
+    }
+    .post .actions .report-button {
+        padding: 5px;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+    }
+    .image-upload {
+        margin-bottom: 15px;
+    }
+    .image-upload input {
+        display: none;
+    }
+    .image-upload label {
+        background-color: #f0f2f5;
+        color: #1da1f2;
+        padding: 8px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s;
+    }
+    .image-upload label:hover {
+        background-color: #e1e8ed;
+    }
+    .preview-image {
+        max-width: 100%;
+        max-height: 300px;
+        margin-top: 10px;
+        border-radius: 8px;
+        object-fit: cover;
+    }
+    .clearfix::after {
+        content: "";
+        clear: both;
+        display: table;
+    }
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+        background-color: #fefefe;
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 300px;
+        border-radius: 8px;
+        text-align: center;
+    }
+    .modal-content button {
+        margin: 10px;
+        padding: 10px 20px;
+        background-color: #1da1f2;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    .modal-content button:hover {
+        background-color: #1991db;
+    }
+    #report-modal .modal-content {
+        width: 400px;
+    }
+    #report-reason {
+        width: 100%;
+        margin: 10px 0;
+        padding: 5px;
+    }
+    .replies {
+        margin-top: 10px;
+        padding-left: 20px;
+        border-left: 2px solid #e1e8ed;
+    }
+    .reply {
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    .reply .user-info {
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+    }
+    .reply .user-info img {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        margin-right: 5px;
+    }
+    .reply .content {
+        font-size: 14px;
+        margin-bottom: 5px;
+    }
+    .reply .actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+    }
+    .reply-form {
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+    .reply-form textarea {
+        width: 100%;
+        height: 60px;
+        margin-bottom: 5px;
+        padding: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        resize: none;
+        font-size: 14px;
+        box-sizing: border-box;
+    }
+    .reply-form button {
+        background-color: #1da1f2;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 20px;
+        cursor: pointer;
+        font-size: 14px;
+        float: right;
+    }
+    .bypass-checkbox {
+        margin-bottom: 10px;
+        display: none;
+    }
+</style>
 </head>
 <body>
-
-    <header>
-        <h1>Видеохостинговая Платформа</h1>
-    </header>
-
-    <div class="upload-section">
-        <h2>Загрузить Видео</h2>
-        <input type="file" id="videoUpload" accept="video/*">
-        <br>
-        <button class="upload-button" id="uploadButton">Загрузить</button>
+<header>
+    <h1>БуфХол<br><span class="author">От фыфвгдф</span></h1>
+</header>
+<div class="scrolling-banner">
+    <div class="scrolling-text">
+         | &nbsp;&nbsp;&nbsp;&nbsp;четыре маленьких марвина прыгают на кровати &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;ПРЕКРАТИТЕ КОПИРОВАТЬ ЭТОТ САЙТ&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;EpicQuest 2025 когда&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;мику мику у и у&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;max design pro - это пик&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;
+        четыре маленьких марвина прыгают на кровати &nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;ПРЕКРАТИТЕ КОПИРОВАТЬ ЭТОТ САЙТ&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;EpicQuest 2025 когда&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;мику мику у и у&nbsp;&nbsp;&nbsp;&nbsp; | &nbsp;&nbsp;&nbsp;&nbsp;max design pro - это пик&nbsp;&nbsp;&nbsp;&nbsp;
     </div>
-
-    <div class="videos-section">
-        <h2>Доступные Видео</h2>
-        <div class="videos-grid" id="videosGrid">
-            <!-- Видео будут загружены сюда -->
+</div>
+<div class="warning-bar">
+    Посты сбрасываются при каждом обновлении.
+    <button class="dismiss-button" onclick="dismissWarningBar()">&times;</button>
+</div>
+<div class="container">
+    <div class="post-form">
+        <textarea id="post-content" placeholder="Что у вас нового?" maxlength="100000"></textarea>
+        <div class="image-upload">
+            <button onclick="openMediaModal()" type="button">Добавить медиа</button>
+        </div>
+        <div class="bypass-checkbox">
+            <label>
+                <input type="checkbox" id="bypass-moderation">
+                Обойти модерацию (только для админов)
+            </label>
+        </div>
+        <img id="preview-image" class="preview-image" style="display: none;">
+        <div class="clearfix">
+            <button onclick="createPost()">Опубликовать</button>
         </div>
     </div>
+    <div id="posts-container"></div>
+    <div id="debug-log"></div>
+</div>
+<div id="media-modal" class="modal">
+    <div class="modal-content">
+        <h2>Добавить медиа</h2>
+        <button onclick="selectMediaType('image')">Загрузить изображение</button>
+        <button onclick="openVideoUrlPopup()">Добавить URL видео/GIF</button>
+        <input type="file" id="image-input" accept="image/*" style="display: none;">
+        <button onclick="closeMediaModal()">Отмена</button>
+    </div>
+</div>
+<div id="video-url-popup" class="modal">
+    <div class="modal-content">
+        <h2>Введите URL видео/GIF</h2>
+        <input type="text" id="video-url-input" placeholder="Введите URL видео/GIF">
+        <button onclick="addVideoUrl()">Добавить</button>
+        <button onclick="closeVideoUrlPopup()">Отмена</button>
+    </div>
+</div>
+<div id="report-modal" class="modal">
+    <div class="modal-content">
+        <h2>Пожаловаться на пост</h2>
+        <p>Вы уверены, что хотите пожаловаться на этот пост за неприемлемое содержание?</p>
+        <select id="report-reason">
+            <option value="">Выберите дополнительную информацию (необязательно)</option>
+            <option value="personal_info">Раскрывает конфиденциальную личную информацию</option>
+            <option value="nsfw_image">Изображение для взрослых</option>
+            <option value="spam">Спам</option>
+            <option value="harassment">Преследование</option>
+        </select>
+        <button onclick="confirmReport()">Да, пожаловаться</button>
+        <button onclick="closeReportModal()">Отмена</button>
+    </div>
+</div>
+<div id="posting-modal" class="modal">
+    <div class="modal-content">
+        <h2>Публикация контента...</h2>
+        <div class="spinner"></div>
+    </div>
+</div>
+<div id="blocked-post-modal" class="modal">
+    <div class="modal-content">
+        <h2>Извините, этот пост не может быть опубликован!</h2>
+        <p>Пожалуйста, попробуйте еще раз с другим содержанием.</p>
+        <button onclick="closeBlockedPostModal()">Закрыть</button>
+    </div>
+</div>
+<div id="repost-modal" class="modal">
+    <div class="modal-content">
+        <h2>Репост</h2>
+        <p>Как вы хотите сделать репост?</p>
+        <button onclick="repostPost()">Репост</button>
+        <button onclick="quoteRepostPost()">Цитировать репост</button>
+        <button onclick="closeRepostModal()">Отмена</button>
+    </div>
+</div>
+<script>
+const adminUsers = ['kasaneteto', 'Sophie_', 'enchantedmist43039873', 'фыфвгдф'];
 
-    <script>
-        // Настройка Firebase
-        const firebaseConfig = {
-            apiKey: "ВАШ_API_KEY",
-            authDomain: "ВАШ_AUTH_DOMAIN",
-            projectId: "ВАШ_PROJECT_ID",
-            storageBucket: "ВАШ_STORAGE_BUCKET",
-            messagingSenderId: "ВАШ_MESSAGING_SENDER_ID",
-            appId: "ВАШ_APP_ID",
-            databaseURL: "ВАШ_DATABASE_URL"
-        };
+// Update all error messages and alerts to Russian
+function createPost() {
+    log('Создание поста...');
+    const content = document.getElementById('post-content').value;
+    const imageInput = document.getElementById('image-input');
+    const videoUrlInput = document.getElementById('video-url-input');
+    const imageFile = imageInput.files[0];
+    const videoUrl = videoUrlInput.value.trim();
+    const currentUsername = getCurrentUsername();
+    const isAdmin = adminUsers.includes(currentUsername);
 
-        // Инициализация Firebase
-        firebase.initializeApp(firebaseConfig);
-        const storage = firebase.storage();
-        const database = firebase.database();
+    const bypassModerationElement = document.getElementById('bypass-moderation');
+    const bypassModeration = isAdmin && bypassModerationElement ? bypassModerationElement.checked : false;
 
-        const uploadButton = document.getElementById('uploadButton');
-        const videoUpload = document.getElementById('videoUpload');
-        const videosGrid = document.getElementById('videosGrid');
+    if (content.trim() === '' && !imageFile && !videoUrl) {
+        log('Содержание поста пусто и медиа не выбрано');
+        alert('Ваш пост пуст. Пожалуйста, добавьте текст или медиа-контент.');
+        return;
+    }
 
-        uploadButton.addEventListener('click', () => {
-            const file = videoUpload.files[0];
-            if (!file) {
-                alert("Пожалуйста, выберите видео для загрузки.");
-                return;
+    if (!isAdmin && content.length > 450) {
+        log('Содержание поста превышает 450 символов');
+        alert('Ваш пост слишком длинный. Пожалуйста, сократите его до 450 символов.');
+        return;
+    }
+
+    showPostingModal();
+
+    let shouldBlock = false;
+    if (!bypassModeration) {
+        shouldBlock = await checkPostContent(content);
+    }
+
+    if (shouldBlock) {
+        hidePostingModal();
+        showBlockedPostModal();
+        log('Пост заблокирован модерацией контента');
+        return;
+    }
+
+    const post = {
+        id: Date.now(),
+        content: content,
+        username: currentUsername,
+        avatarUrl: room.party.client?.avatarUrl || 'default-avatar.png',
+        likes: 0,
+        likedBy: [],
+        reposts: 0,
+        replies: [],
+        timestamp: new Date().toISOString()
+    };
+
+    if (imageFile) {
+        log('Выбран файл изображения, читаем...');
+        try {
+            const imageUrl = await readFileAsDataURL(imageFile);
+            post.mediaUrl = await compressImage(imageUrl);
+            post.mediaType = 'image';
+        } catch (error) {
+            log(`Ошибка при чтении файла изображения: ${error}`);
+            alert('Произошла ошибка при обработке изображения. Пожалуйста, попробуйте еще раз.');
+            hidePostingModal();
+            return;
+        }
+    } else if (videoUrl) {
+        if (isValidMediaUrl(videoUrl)) {
+            post.mediaUrl = videoUrl;
+            post.mediaType = 'video';
+        } else {
+            alert('Некорректный URL видео/GIF. Пожалуйста, используйте прямую ссылку на файл .mp4, .webm или .gif.');
+            hidePostingModal();
+            return;
+        }
+    }
+
+    log(`Отправка поста: ${JSON.stringify(post)}`);
+    await sendPost(post);
+
+    document.getElementById('post-content').value = '';
+    imageInput.value = '';
+    videoUrlInput.value = '';
+    document.getElementById('preview-image').style.display = 'none';
+    log('Пост создан и форма очищена');
+    hidePostingModal();
+}
+
+async function compressImage(imageUrl) {
+    return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+
+            let width = img.width;
+            let height = img.height;
+            const maxDimension = 800;
+
+            if (width > height && width > maxDimension) {
+                height *= maxDimension / width;
+                width = maxDimension;
+            } else if (height > maxDimension) {
+                width *= maxDimension / height;
+                height = maxDimension;
             }
 
-            const storageRef = storage.ref('videos/' + file.name);
-            const uploadTask = storageRef.put(file);
+            canvas.width = width;
+            canvas.height = height;
 
-            uploadTask.on('state_changed', 
-                (snapshot) => {
-                    // Можно реализовать индикатор загрузки
-                }, 
-                (error) => {
-                    console.error("Ошибка загрузки:", error);
-                }, 
-                () => {
-                    uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-                        const videoData = {
-                            name: file.name,
-                            url: downloadURL
+            ctx.drawImage(img, 0, 0, width, height);
+
+            const compressedImageUrl = canvas.toDataURL('image/jpeg', 0.7);
+            resolve(compressedImageUrl);
+        };
+        img.onerror = reject;
+        img.src = imageUrl;
+    });
+}
+
+async function checkPostContent(content, reason = '') {
+    const prompt = `Определите, является ли этот пост подходящим для размещения в Интернете. Вы должны придерживаться довольно легких рекомендаций, но целенаправленное преследование, оскорбления и вообще плохие вещи не допускаются. Пост был сообщен пользователем${reason ? ` по следующей причине: ${reason}` : ''}. Верните JSON значение boolean с заголовком "block" на основе того, следует ли удалить пост или нет.
+
+Содержание поста: "${content}"
+
+Формат ответа:
+{
+  "block": boolean
+}`;
+
+    try {
+        const response = await fetch('/api/ai_completion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+            body: JSON.stringify({
+                prompt: prompt,
+                data: content
+            }),
+        });
+        const data = await response.json();
+        return data.block;
+    } catch (error) {
+        console.error('Ошибка проверки содержания поста:', error);
+        return false; // Не удалять пост в случае ошибки
+    }
+}
+
+function showPostingModal() {
+    document.getElementById('posting-modal').style.display = 'block';
+}
+
+function hidePostingModal() {
+    document.getElementById('posting-modal').style.display = 'none';
+}
+
+function showBlockedPostModal() {
+    document.getElementById('blocked-post-modal').style.display = 'block';
+}
+
+function closeBlockedPostModal() {
+    document.getElementById('blocked-post-modal').style.display = 'none';
+}
+
+async function sendPost(post) {
+    try {
+        log('Обновление хранилища с новым постом');
+        await room.store.update({
+            id: 'posts',
+            dependencies: { post },
+            updateFunction: (posts) => {
+                if (!posts) posts = [];
+                return [post, ...posts].slice(0, 50);
+            }
+        });
+
+        log('Отправка нового поста');
+        await room.send({
+            type: 'newPost',
+            post: post
+        });
+
+        log('Пост успешно отправлен');
+        await fetchAndRenderPosts();
+    } catch (error) {
+        log(`Ошибка при отправке поста: ${error}`);
+        alert('Произошла ошибка при сохранении вашего поста. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
+function addPost(post) {
+    log(`Добавление поста в локальный массив: ${JSON.stringify(post)}`);
+    posts.unshift(post);
+    posts = posts.slice(0, 50);
+    renderPosts();
+}
+
+function renderPosts() {
+    log(`Отрисовка ${posts.length} постов`);
+    const container = document.getElementById('posts-container');
+    container.innerHTML = '';
+    posts.forEach(post => {
+        const postElement = document.createElement('div');
+        postElement.className = 'post';
+        postElement.innerHTML = renderPost(post);
+        container.appendChild(postElement);
+    });
+}
+
+function renderPost(post) {
+    const isLiked = post.likedBy.includes(getCurrentUsername());
+    const isFollowing = post.isFollowing;
+    return `
+        <div class="user-info">
+            <img src="${post.avatarUrl}" alt="${post.username}">
+            <span class="username">${post.username}</span>
+            ${isFollowing ? '<span class="following-indicator">Подписка</span>' : ''}
+        </div>
+        ${post.repostOf ? `<div class="repost-info">Репост от ${post.repostOf.username}</div>` : ''}
+        ${post.quoteOf ? `
+            <div class="quote-post">
+                <div class="quote-user-info">
+                    <img src="${post.quoteOf.avatarUrl}" alt="${post.quoteOf.username}">
+                    <span class="username">${post.quoteOf.username}</span>
+                </div>
+                <div class="quote-content">${post.quoteOf.content}</div>
+            </div>
+        ` : ''}
+        <div class="content">${post.content}</div>
+        ${post.mediaUrl ? renderMedia(post) : ''}
+        <div class="actions">
+            <div class="left-buttons">
+                <button onclick="likePost(${post.id})" class="${isLiked ? 'liked' : ''}">
+                    ${isLiked ? '❤️' : '🤍'} ${post.likes}
+                </button>
+                <button onclick="openRepostModal(${post.id})">🔁 ${post.reposts}</button>
+                <button onclick="toggleReplyForm(${post.id})">💬 ${post.replies ? post.replies.length : 0}</button>
+            </div>
+            <span>${new Date(post.timestamp).toLocaleString('ru-RU')}</span>
+            <button onclick="reportPost(${post.id})" class="report-button">⚠️</button>
+        </div>
+        <div id="reply-form-${post.id}" class="reply-form" style="display: none;">
+            <textarea id="reply-content-${post.id}" placeholder="Написать ответ..."></textarea>
+            <div class="clearfix">
+                <button onclick="submitReply(${post.id})">Ответить</button>
+            </div>
+        </div>
+        <div id="replies-${post.id}" class="replies">
+            ${post.replies ? post.replies.map(reply => `
+                <div class="reply">
+                    <div class="user-info">
+                        <img src="${reply.avatarUrl}" alt="${reply.username}">
+                        <span class="username">${reply.username}</span>
+                    </div>
+                    <div class="content">${reply.content}</div>
+                    <div class="actions">
+                        <button onclick="likePost(${reply.id})" class="${reply.likedBy.includes(getCurrentUsername()) ? 'liked' : ''}">
+                            ${reply.likedBy.includes(getCurrentUsername()) ? '❤️' : '🤍'} ${reply.likes}
+                        </button>
+                        <span>${new Date(reply.timestamp).toLocaleString('ru-RU')}</span>
+                    </div>
+                </div>
+            `).join('') : ''}
+        </div>
+    `;
+}
+
+function toggleReplyForm(postId) {
+    const replyForm = document.getElementById(`reply-form-${postId}`);
+    replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitReply(postId) {
+    const content = document.getElementById(`reply-content-${postId}`).value;
+    if (content.trim() === '') return;
+
+    const reply = {
+        id: Date.now(),
+        content: content,
+        username: getCurrentUsername(),
+        avatarUrl: room.party.client?.avatarUrl || 'default-avatar.png',
+        likes: 0,
+        likedBy: [],
+        reposts: 0,
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        await room.store.update({
+            id: 'posts',
+            dependencies: { reply, postId },
+            updateFunction: (posts) => {
+                return posts.map(post => {
+                    if (post.id === postId) {
+                        return {
+                            ...post,
+                            replies: [...(post.replies || []), reply]
                         };
-                        const newVideoKey = database.ref().child('videos').push().key;
-                        database.ref('videos/' + newVideoKey).set(videoData);
-                    });
-                }
-            );
+                    }
+                    return post;
+                });
+            }
         });
 
-        // Функция для отображения видео
-        function displayVideo(video) {
-            const videoDiv = document.createElement('div');
-            videoDiv.className = 'video-item';
+        document.getElementById(`reply-content-${postId}`).value = '';
+        await fetchAndRenderPosts();
+    } catch (error) {
+        log(`Ошибка при отправке ответа: ${error}`);
+        alert('Произошла ошибка при отправке вашего ответа. Пожалуйста, попробуйте еще раз.');
+    }
+}
 
-            const videoElement = document.createElement('video');
-            videoElement.src = video.url;
-            videoElement.controls = true;
-            videoElement.alt = video.name;
-            videoElement.width = 300;
-            videoElement.height = 200;
+function openRepostModal(postId) {
+    currentRepostId = postId;
+    document.getElementById('repost-modal').style.display = 'block';
+}
 
-            videoDiv.appendChild(videoElement);
-            videosGrid.appendChild(videoDiv);
+async function repostPost() {
+    if (currentRepostId === null) return;
+    const originalPost = posts.find(p => p.id === currentRepostId);
+    if (!originalPost) return;
+
+    const repost = {
+        id: Date.now(),
+        content: originalPost.content,
+        username: getCurrentUsername(),
+        avatarUrl: room.party.client?.avatarUrl || 'default-avatar.png',
+        likes: 0,
+        likedBy: [],
+        reposts: 0,
+        repostOf: {
+            username: originalPost.username,
+            id: originalPost.id
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        await room.store.update({
+            id: 'posts',
+            dependencies: { repost },
+            updateFunction: (posts) => {
+                return [repost, ...posts].slice(0, 50);
+            }
+        });
+
+        await room.store.update({
+            id: 'posts',
+            dependencies: { currentRepostId },
+            updateFunction: (posts) => {
+                return posts.map(post => {
+                    if (post.id === currentRepostId) {
+                        return { ...post, reposts: post.reposts + 1 };
+                    }
+                    return post;
+                });
+            }
+        });
+
+        closeRepostModal();
+        await fetchAndRenderPosts();
+    } catch (error) {
+        log(`Ошибка репоста: ${error}`);
+        alert('Произошла ошибка при репосте. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
+async function quoteRepostPost() {
+    if (currentRepostId === null) return;
+    const originalPost = posts.find(p => p.id === currentRepostId);
+    if (!originalPost) return;
+
+    const content = prompt("Добавьте свой комментарий к репосту:");
+    if (content === null) return;
+
+    const quoteRepost = {
+        id: Date.now(),
+        content: content,
+        username: getCurrentUsername(),
+        avatarUrl: room.party.client?.avatarUrl || 'default-avatar.png',
+        likes: 0,
+        likedBy: [],
+        reposts: 0,
+        quoteOf: {
+            username: originalPost.username,
+            content: originalPost.content,
+            avatarUrl: originalPost.avatarUrl,
+            id: originalPost.id
+        },
+        timestamp: new Date().toISOString()
+    };
+
+    try {
+        await room.store.update({
+            id: 'posts',
+            dependencies: { quoteRepost },
+            updateFunction: (posts) => {
+                return [quoteRepost, ...posts].slice(0, 50);
+            }
+        });
+
+        await room.store.update({
+            id: 'posts',
+            dependencies: { currentRepostId },
+            updateFunction: (posts) => {
+                return posts.map(post => {
+                    if (post.id === currentRepostId) {
+                        return { ...post, reposts: post.reposts + 1 };
+                    }
+                    return post;
+                });
+            }
+        });
+
+        closeRepostModal();
+        await fetchAndRenderPosts();
+    } catch (error) {
+        log(`Ошибка цитирования репоста: ${error}`);
+        alert('Произошла ошибка при цитировании репоста. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
+function closeRepostModal() {
+    currentRepostId = null;
+    document.getElementById('repost-modal').style.display = 'none';
+}
+
+document.getElementById('image-input').addEventListener('change', function(event) {
+    updateMediaPreview();
+});
+
+function isValidMediaUrl(url) {
+    const allowedExtensions = ['.mp4', '.webm', '.gif'];
+    const urlLower = url.toLowerCase();
+    return allowedExtensions.some(ext => urlLower.endsWith(ext)) && !urlLower.includes('discord.com');
+}
+
+function renderMedia(post) {
+    if (post.mediaType === 'image') {
+        return `<img src="${post.mediaUrl}" alt="Изображение поста" style="max-width: 100%; border-radius: 8px; margin-bottom: 15px;">`;
+    } else if (post.mediaType === 'video') {
+        if (post.mediaUrl.toLowerCase().endsWith('.gif')) {
+            return `<img src="${post.mediaUrl}" alt="GIF поста" style="max-width: 100%; border-radius: 8px; margin-bottom: 15px;">`;
+        } else {
+            return `
+                <video controls style="max-width: 100%; border-radius: 8px; margin-bottom: 15px;">
+                    <source src="${post.mediaUrl}" type="video/${post.mediaUrl.split('.').pop()}">
+                    Ваш браузер не поддерживает тег видео.
+                </video>
+            `;
         }
+    }
+    return '';
+}
 
-        // Загрузка и отображение видео из базы данных
-        database.ref('videos').on('value', (snapshot) => {
-            videosGrid.innerHTML = '';
-            snapshot.forEach((childSnapshot) => {
-                const video = childSnapshot.val();
-                displayVideo(video);
-            });
+log('Инициализация постов из хранилища');
+fetchAndRenderPosts();
+
+window.addEventListener('resize', renderPosts);
+
+log('БуфХол инициализирован');
+
+function reportPost(postId) {
+    currentReportId = postId;
+    document.getElementById('report-modal').style.display = 'block';
+}
+
+function closeReportModal() {
+    currentReportId = null;
+    document.getElementById('report-modal').style.display = 'none';
+}
+
+async function confirmReport() {
+    if (currentReportId === null) return;
+    const post = posts.find(p => p.id === currentReportId);
+    if (!post) return;
+
+    const reason = document.getElementById('report-reason').value;
+
+    showPostingModal();
+
+    const shouldDelete = await checkPostContent(post.content, reason);
+
+    hidePostingModal();
+
+    if (shouldDelete) {
+        await deletePost(currentReportId);
+        alert('Сообщенный пост оказался неприемлемым и был удален.');
+    } else {
+        alert('Сообщенный пост не был признан неприемлемым.');
+    }
+
+    closeReportModal();
+    await fetchAndRenderPosts();
+}
+
+async function deletePost(postId) {
+    try {
+        await room.store.update({
+            id: 'posts',
+            dependencies: { postId },
+            updateFunction: (posts) => {
+                return posts.filter(post => post.id !== postId);
+            }
         });
-    </script>
+    } catch (error) {
+        log(`Ошибка при удалении поста: ${error}`);
+        alert('Произошла ошибка при удалении поста. Пожалуйста, попробуйте еще раз.');
+    }
+}
 
-</body>
-</html>
+async function likePost(id) {
+    const currentUsername = getCurrentUsername();
+
+    try {
+        await room.store.update({
+            id: 'posts',
+            dependencies: { id, currentUsername },
+            updateFunction: (posts) => {
+                return posts.map(post => {
+                    if (post.id === id) {
+                        const isLiked = post.likedBy.includes(currentUsername);
+                        return {
+                            ...post,
+                            likes: isLiked ? post.likes - 1 : post.likes + 1,
+                            likedBy: isLiked
+                                ? post.likedBy.filter(username => username !== currentUsername)
+                                : [...post.likedBy, currentUsername]
+                        };
+                    } else if (post.replies) {
+                        return {
+                            ...post,
+                            replies: post.replies.map(reply => {
+                                if (reply.id === id) {
+                                    const isLiked = reply.likedBy.includes(currentUsername);
+                                    return {
+                                        ...reply,
+                                        likes: isLiked ? reply.likes - 1 : reply.likes + 1,
+                                        likedBy: isLiked
+                                            ? reply.likedBy.filter(username => username !== currentUsername)
+                                            : [...reply.likedBy, currentUsername]
+                                    };
+                                }
+                                return reply;
+                            })
+                        };
+                    }
+                    return post;
+                });
+            }
+        });
+
+        await fetchAndRenderPosts();
+    } catch (error) {
+        log(`Ошибка при лайке поста: ${error}`);
+        console.error('Ошибка при лайке поста:', error);
+        alert('Произошла ошибка при лайке поста. Пожалуйста, попробуйте еще раз.');
+    }
+}
+
+function readFileAsDataURL(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (event) => resolve(event.target.result);
+        reader.onerror = (error) => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+
+function updatePostForm() {
+    const postForm = document.querySelector('.post-form');
+    const currentUsername = getCurrentUsername();
+    const isAdmin = adminUsers.includes(currentUsername);
+
+    const bypassCheckboxContainer = document.querySelector('.bypass-checkbox');
+    if (isAdmin) {
+        bypassCheckboxContainer.style.display = 'block';
+    } else {
+        bypassCheckboxContainer.style.display = 'none';
+    }
+
+    const textArea = document.getElementById('post-content');
+    textArea.maxLength = isAdmin ? 100000 : 450;
+}
+
+room.onPeersChanged = () => {
+    updatePostForm();
+};
+
+updatePostForm();
+
+function dismissWarningBar() {
+    const warningBar = document.querySelector('.warning-bar');
+    if (warningBar) {
+        warningBar.style.display = 'none';
+    }
+}
+</script>
+</body></html>
