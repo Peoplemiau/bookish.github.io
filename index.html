@@ -1,112 +1,343 @@
 <!DOCTYPE html>
-<html lang="ru" class="scroll-smooth" style="background:#202124">
+<html lang="en">
 <head>
-  <!-- Метаданные и предзагрузка ресурсов вашего основного сайта -->
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width"/>
-  <meta name="theme-color" content="#FFFFFF"/>
-  <title>ChatGPT на русском: вход в ChatGPT онлайн MashaGPT</title>
-  <meta name="description" content="ChatGPT на русском: вход или регистрация. Сервис по работе с ChatGPT — №1 для пользователей из России. ChatGPT-4o-mini/4o онлайн на русском. Работает без VPN. Напишет вам тексты, эссе и код для программистов. Отвечает на вопросы, создаёт идеи и изображения. Бесплатные генерации каждый день."/>
-  <!-- Остальные метатеги и предзагрузка ресурсов -->
+  <base href="https://every-ai-chat-free.com/">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chat GPT4 Free</title>
 
-  <!-- Подключение стилей вашего основного сайта -->
-  <link rel="stylesheet" href="/_next/static/css/90c42edd01ebbd91.css" data-n-g=""/>
-  <link rel="stylesheet" href="/_next/static/css/d9322df4fe06496f.css" data-n-p=""/>
+  <!-- Include highlight.js styles -->
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/default.min.css">
   
-  <!-- Подключение стилей чата ORKGPT -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
   <style>
-    /* Стили чата ORKGPT */
-    /* (Скопируйте сюда все стили из первого HTML-кода) */
-    /* Пример: */
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e1e;
+      color: #ffffff;
+      height: 100%;
+      overflow: hidden;
+    }
+
     .container {
       display: flex;
       height: 100vh;
-      width: 100vw;
     }
-    /* Добавьте остальные стили... */
-    
-    /* Убедитесь, что стили не конфликтуют с основным сайтом */
+
+    .sidebar {
+      width: 250px;
+      min-width: 250px;
+      background-color: #252526;
+      color: #d4d4d4;
+      padding: 20px;
+      overflow-y: auto;
+      box-shadow: 2px 0 5px rgba(0,0,0,0.5);
+    }
+
+    .main-content {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 20px;
+      overflow-y: auto;
+      background-color: #1e1e1e;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #d4d4d4;
+      position: relative;
+    }
+
+    .header h1 {
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-weight: normal;
+    }
+
+    .chat-area {
+      flex-grow: 1;
+      background-color: #2d2d2d;
+      border-radius: 5px;
+      padding: 15px;
+      overflow-y: auto;
+      margin-bottom: 20px;
+      color: #d4d4d4;
+    }
+
+    .footer {
+      text-align: center;
+      font-size: 12px;
+      color: #808080;
+      margin-top: 10px;
+    }
+
+    #userInput {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #2d2d2d;
+      color: #d4d4d4;
+      border: 1px solid #3c3c3c;
+      border-radius: 5px;
+      resize: vertical;
+      min-height: 50px;
+      max-height: 200px;
+    }
+
+    #sendButton, #uploadButton {
+      width: 100%;
+      padding: 10px;
+      background-color: #007acc;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-bottom: 10px;
+    }
+
+    #sendButton:hover, #uploadButton:hover {
+      background-color: #005a9e;
+    }
+
+    #modelSelect {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #2d2d2d;
+      color: #d4d4d4;
+      border: 1px solid #3c3c3c;
+      border-radius: 5px;
+    }
+
+    .created-by {
+      position: absolute;
+      bottom: 10px;
+      right: 20px;
+      font-size: 12px;
+      color: #808080;
+    }
+
+    .message {
+      margin-bottom: 10px;
+      padding: 8px;
+      border-radius: 5px;
+      word-wrap: break-word;
+      white-space: pre-wrap;
+      background-color: #1e1e1e;
+    }
+
+    .user {
+      background-color: #3c3c3c;
+    }
+
+    .assistant {
+      background-color: #2d2d2d;
+    }
+
+    .system {
+      background-color: #2d2d2d;
+      font-style: italic;
+    }
+
+    .message code {
+      background-color: #1e1e1e;
+      padding: 2px 4px;
+      border-radius: 3px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .message pre code {
+      display: block;
+      padding: 10px;
+      background-color: #1e1e1e;
+      overflow-x: auto;
+    }
+
+    .loading-spinner {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 3px solid #ffffff;
+      border-radius: 50%;
+      border-top: 3px solid #007acc;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .chat-history-item {
+      cursor: pointer;
+      padding: 10px;
+      margin-bottom: 5px;
+      background-color: #2a2a2a;
+      border-radius: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s ease;
+    }
+
+    .chat-history-item:hover {
+      background-color: #3c3c3c;
+    }
+
+    .chat-history-item.selected {
+      background-color: #3c3c3c;
+    }
+
+    .chat-history-buttons {
+      display: flex;
+      gap: 5px;
+    }
+
+    .chat-history-button {
+      background-color: #3c3c3c;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 3px 6px;
+      font-size: 10px;
+      cursor: pointer;
+    }
+
+    .chat-history-button:hover {
+      background-color: #5a5a5a;
+    }
+
+    .new-chat-button {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .new-chat-button:hover {
+      background-color: #005a9e;
+    }
+
+    #debugButton {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background-color: #3c3c3c;
+      color: white;
+      border: none;
+      border-radius: 3px;
+      padding: 5px 10px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    #debugButton:hover {
+      background-color: #5a5a5a;
+    }
+
+    .eyeball-button {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      padding: 0 5px;
+      color: #d4d4d4;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: #2d2d2d;
+      padding: 20px;
+      border-radius: 5px;
+      z-index: 1000;
+      max-width: 80%;
+      max-height: 80%;
+      overflow-y: auto;
+    }
+
+    .popup-content {
+      color: white;
+      white-space: pre-wrap;
+    }
+
+    .close-popup {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: none;
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
   </style>
 </head>
-<body class="scrollbar bg-surface-primary-default scrollbar-thumb-st-secondary scrollbar-track scrollbar-track-rounded-lg scrollbar-thumb-rounded-lg scrollbar-w-[6px]">
-  <div id="__next">
-    <!-- Структура вашего основного сайта -->
-    <!-- ... -->
-
-    <!-- Место для интеграции чата -->
-    <div class="container">
-      <div class="sidebar">
-        <button class="new-chat-button" id="newChatButton">New Chat</button>
-        <div id="chatHistory"></div>
-      </div>
-      <div class="main-content">
-        <div class="header">
-          <h1>ORKGPT</h1>
-          <button id="debugButton">Debug</button>
-        </div>
-        <div class="chat-area" id="chat-area">
-          <!-- Chat messages will be inserted here -->
-        </div>
-        <textarea id="userInput" placeholder="Type your message here..."></textarea>
-        <button id="sendButton">Send</button>
-        <!-- File upload button -->
-        <input type="file" id="fileInput" style="display: none;" multiple />
-        <button id="uploadButton">Upload Files</button>
-        <select id="modelSelect">
-          <option value="">Loading models...</option>
-        </select>
-        <div class="footer">
-          ORKGPT. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.
-        </div>
-        <div class="created-by">Created by @laznin ⚡</div>
-      </div>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <button class="new-chat-button" id="newChatButton">New Chat</button>
+      <div id="chatHistory"></div>
     </div>
-
-    <!-- Остальная часть вашего основного сайта -->
-    <!-- ... -->
-
-    <!-- Всплывающие окна и оверлей -->
-    <div id="overlay" class="overlay"></div>
-    <div id="popup" class="popup">
-      <button class="close-popup" onclick="closePopup()">×</button>
-      <div id="popupContent" class="popup-content"></div>
+    <div class="main-content">
+      <div class="header">
+        <h1>Chat GPT4 Free</h1>
+        <button id="debugButton">Debug</button>
+      </div>
+      <div class="chat-area" id="chat-area">
+        <!-- Chat messages will be inserted here -->
+      </div>
+      <textarea id="userInput" placeholder="Type your message here..."></textarea>
+      <button id="sendButton">Send</button>
+      <!-- File upload button -->
+      <input type="file" id="fileInput" style="display: none;" multiple />
+      <button id="uploadButton">Upload Files</button>
+      <select id="modelSelect">
+        <option value="">Loading models...</option>
+      </select>
+      <div class="footer">
+        Chat GPT4 Free. Free Research Preview. Our goal is to make AI systems more natural and safe to interact with. Your feedback will help us improve.
+      </div>
+      <div class="created-by">Created by @laznin ⚡</div>
     </div>
   </div>
 
-  <!-- Подключение скриптов вашего основного сайта -->
-  <script src="/_next/static/chunks/polyfills-42372ed130431b0a.js" defer></script>
-  <script src="./main.js" async defer data-nscript="beforeInteractive"></script>
-  <script src="/_next/static/chunks/webpack-b44dedb1f244bb41.js" defer></script>
-  <script src="/_next/static/chunks/framework-b0ec748c7a4c483a.js" defer></script>
-  <script src="/_next/static/chunks/main-29a491a23e8fc869.js" defer></script>
-  <script src="/_next/static/chunks/pages/_app-0b8f0acbc034d1fa.js" defer></script>
-  <script src="/_next/static/chunks/0f4ba5df-829aa9708f446b36.js" defer></script>
-  <script src="/_next/static/chunks/175675d1-a1a6b6f4df43b8f4.js" defer></script>
-  <script src="/_next/static/chunks/31d4e3d1-51085b68e92f5fd1.js" defer></script>
-  <script src="/_next/static/chunks/6132-32a6ce0320c3dd32.js" defer></script>
-  <script src="/_next/static/chunks/7311-6da058c6ffeadead.js" defer></script>
-  <script src="/_next/static/chunks/6753-1b841bad857904f7.js" defer></script>
-  <script src="/_next/static/chunks/1819-12e58a6a2643ddd3.js" defer></script>
-  <script src="/_next/static/chunks/8732-f22ddc8a7ce35370.js" defer></script>
-  <script src="/_next/static/chunks/6222-4bfcb633d558ff3d.js" defer></script>
-  <script src="/_next/static/chunks/2178-ee0c9fa8c6342fd5.js" defer></script>
-  <script src="/_next/static/chunks/3787-df99eeb3338906ca.js" defer></script>
-  <script src="/_next/static/chunks/pages/rustore/chat-a05e7ac1af67de5a.js" defer></script>
-  <script src="/_next/static/z6UmvOchI6o3SAv9J-per/_buildManifest.js" defer></script>
-  <script src="/_next/static/z6UmvOchI6o3SAv9J-per/_ssgManifest.js" defer></script>
+  <div id="overlay" class="overlay"></div>
+  <div id="popup" class="popup">
+    <button class="close-popup" onclick="closePopup()">×</button>
+    <div id="popupContent" class="popup-content"></div>
+  </div>
 
-  <!-- Подключение скриптов чата ORKGPT -->
+  <!-- Include highlight.js script -->
   <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
   <script>
-    // Инициализация highlight.js
+    // Initialize highlight.js
     hljs.highlightAll();
   </script>
+
   <script>
-    // Ваши скрипты для чата ORKGPT
-    // (Скопируйте сюда весь JavaScript из первого HTML-кода)
-    // Пример:
-    const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting. Use fractions instead of decimal numbers where applicable. Do not alter code blocks.`;
+    const systemPrompt = `You are an AI assistant. Respond in a helpful, respectful, and honest manner.`;
     let selectedModel = '';
     let currentChatId = null;
     let debugMode = false;
@@ -120,19 +351,13 @@
       const messageDiv = document.createElement('div');
       messageDiv.className = `message ${role}`;
 
-      const prefix = role === 'user' ? 'User: ' : (role === 'assistant' ? 'ORKGPT: ' : 'System: ');
+      const prefix = role === 'user' ? 'User: ' : (role === 'assistant' ? 'AI: ' : '');
 
       const messageContent = document.createElement('div');
-      
-      if (role === 'assistant') {
-        // Преобразуем десятичные числа в дроби для сообщений ассистента
-        content = convertDecimalsToFractions(content);
-      }
-
       messageContent.innerHTML = prefix + content;
 
       messageContent.querySelectorAll('pre code').forEach((block) => {
-        hljs.highlightElement(block);
+        hljs.highlightBlock(block);
       });
 
       messageDiv.appendChild(messageContent);
@@ -159,7 +384,7 @@
       const chatArea = document.getElementById('chat-area');
       const spinnerDiv = document.createElement('div');
       spinnerDiv.className = 'message system';
-      spinnerDiv.innerHTML = 'ORKGPT: <div class="loading-spinner"></div>';
+      spinnerDiv.innerHTML = 'AI: <div class="loading-spinner"></div>';
       chatArea.appendChild(spinnerDiv);
       chatArea.scrollTop = chatArea.scrollHeight;
       return spinnerDiv;
@@ -168,7 +393,7 @@
     function startNewChat() {
       currentChatId = generateUniqueId();
       document.getElementById('chat-area').innerHTML = '';
-      addMessage('system', 'Hello! How can I assist you today?');
+      addMessage('system', 'How can I assist you today?');
       updateChatHistory();
     }
 
@@ -393,62 +618,6 @@
           reader.readAsText(file);
         });
       }
-    }
-
-    /**
-     * Функция для преобразования десятичных чисел в дроби
-     * @param {string} text - Текст сообщения
-     * @returns {string} - Обновленный текст с дробями
-     */
-    function convertDecimalsToFractions(text) {
-      // Разделяем текст на части, исключая кодовые блоки
-      const parts = text.split(/(```[\s\S]*?```)/g);
-      for (let i = 0; i < parts.length; i++) {
-        // Пропускаем кодовые блоки
-        if (parts[i].startsWith('```')) continue;
-        // Регулярное выражение для поиска десятичных чисел (включая отрицательные)
-        const decimalRegex = /(-?\d+\.\d+)/g;
-        parts[i] = parts[i].replace(decimalRegex, (match) => {
-          const decimal = parseFloat(match);
-          // Если число целое (например, 25.0), возвращаем целое число
-          if (Number.isInteger(decimal)) {
-            return decimal.toString();
-          }
-          const fraction = decimalToFraction(decimal);
-          return fraction ? fraction : match;
-        });
-      }
-      return parts.join('');
-    }
-
-    /**
-     * Преобразование десятичного числа в дробь
-     * @param {number} decimal - Десятичное число
-     * @returns {string|null} - Дробь в формате 'числитель/знаменатель' или null, если невозможно
-     */
-    function decimalToFraction(decimal) {
-      const tolerance = 1.0E-6;
-      let h1 = 1, h2 = 0;
-      let k1 = 0, k2 = 1;
-      let b = Math.abs(decimal);
-      let sign = decimal < 0 ? '-' : '';
-
-      while (Math.abs(h1 / k1 - b) > tolerance && k1 < 1000) {
-        const a = Math.floor(b);
-        const aux = h1;
-        h1 = a * h1 + h2;
-        h2 = aux;
-        const auxk = k1;
-        k1 = a * k1 + k2;
-        k2 = auxk;
-        b = 1 / (b - a);
-        if (isNaN(b) || !isFinite(b)) break;
-      }
-
-      // Если знаменатель превышает 1000, не преобразуем
-      if (k1 > 1000) return null;
-
-      return sign + `${h1}/${k1}`;
     }
   </script>
 </body>
