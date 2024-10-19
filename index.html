@@ -353,7 +353,7 @@
   </script>
 
   <script>
-    const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting. Use fractions instead of decimal numbers where applicable.`;
+    const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting. Use fractions instead of decimal numbers where applicable. Do not alter code blocks.`;
     let selectedModel = '';
     let currentChatId = null;
     let debugMode = false;
@@ -648,13 +648,24 @@
      * @returns {string} - Обновленный текст с дробями
      */
     function convertDecimalsToFractions(text) {
-      // Регулярное выражение для поиска десятичных чисел
-      const decimalRegex = /(\d+\.\d+)/g;
-      return text.replace(decimalRegex, (match) => {
-        const decimal = parseFloat(match);
-        const fraction = decimalToFraction(decimal);
-        return fraction ? fraction : match;
-      });
+      // Разделяем текст на части, исключая кодовые блоки
+      const parts = text.split(/(```[\s\S]*?```)/g);
+      for (let i = 0; i < parts.length; i++) {
+        // Пропускаем кодовые блоки
+        if (parts[i].startsWith('```')) continue;
+        // Регулярное выражение для поиска десятичных чисел (включая отрицательные)
+        const decimalRegex = /(-?\d+\.\d+)/g;
+        parts[i] = parts[i].replace(decimalRegex, (match) => {
+          const decimal = parseFloat(match);
+          // Если число целое (например, 25.0), возвращаем целое число
+          if (Number.isInteger(decimal)) {
+            return decimal.toString();
+          }
+          const fraction = decimalToFraction(decimal);
+          return fraction ? fraction : match;
+        });
+      }
+      return parts.join('');
     }
 
     /**
@@ -664,10 +675,12 @@
      */
     function decimalToFraction(decimal) {
       const tolerance = 1.0E-6;
-      let h1 = 1; let h2 = 0;
-      let k1 = 0; let k2 = 1;
-      let b = decimal;
-      do {
+      let h1 = 1, h2 = 0;
+      let k1 = 0, k2 = 1;
+      let b = Math.abs(decimal);
+      let sign = decimal < 0 ? '-' : '';
+
+      while (Math.abs(h1 / k1 - b) > tolerance && k1 < 1000) {
         const a = Math.floor(b);
         const aux = h1;
         h1 = a * h1 + h2;
@@ -675,17 +688,14 @@
         const auxk = k1;
         k1 = a * k1 + k2;
         k2 = auxk;
-        const frac = h1 / k1;
-        if (Math.abs(frac - decimal) < tolerance) {
-          break;
-        }
         b = 1 / (b - a);
-      } while (h1 / k1 !== decimal);
+        if (isNaN(b) || !isFinite(b)) break;
+      }
 
-      // Ограничение на знаменатель до 1000 для избежания слишком больших чисел
+      // Если знаменатель превышает 1000, не преобразуем
       if (k1 > 1000) return null;
 
-      return `${h1}/${k1}`;
+      return sign + `${h1}/${k1}`;
     }
   </script>
 </body>
