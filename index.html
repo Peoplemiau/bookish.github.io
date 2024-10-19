@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css">
   
   <style>
+    /* Ваши стили остаются без изменений */
     body, html {
       margin: 0;
       padding: 0;
@@ -352,7 +353,7 @@
   </script>
 
   <script>
-    const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting.`;
+    const systemPrompt = `You are ORKGPT, an AI assistant. Respond in a clear, professional, and concise manner. Provide code snippets when necessary with proper syntax highlighting. Use fractions instead of decimal numbers where applicable.`;
     let selectedModel = '';
     let currentChatId = null;
     let debugMode = false;
@@ -369,6 +370,12 @@
       const prefix = role === 'user' ? 'User: ' : (role === 'assistant' ? 'ORKGPT: ' : 'System: ');
 
       const messageContent = document.createElement('div');
+      
+      if (role === 'assistant') {
+        // Преобразуем десятичные числа в дроби для сообщений ассистента
+        content = convertDecimalsToFractions(content);
+      }
+
       messageContent.innerHTML = prefix + content;
 
       messageContent.querySelectorAll('pre code').forEach((block) => {
@@ -633,6 +640,52 @@
           reader.readAsText(file);
         });
       }
+    }
+
+    /**
+     * Функция для преобразования десятичных чисел в дроби
+     * @param {string} text - Текст сообщения
+     * @returns {string} - Обновленный текст с дробями
+     */
+    function convertDecimalsToFractions(text) {
+      // Регулярное выражение для поиска десятичных чисел
+      const decimalRegex = /(\d+\.\d+)/g;
+      return text.replace(decimalRegex, (match) => {
+        const decimal = parseFloat(match);
+        const fraction = decimalToFraction(decimal);
+        return fraction ? fraction : match;
+      });
+    }
+
+    /**
+     * Преобразование десятичного числа в дробь
+     * @param {number} decimal - Десятичное число
+     * @returns {string|null} - Дробь в формате 'числитель/знаменатель' или null, если невозможно
+     */
+    function decimalToFraction(decimal) {
+      const tolerance = 1.0E-6;
+      let h1 = 1; let h2 = 0;
+      let k1 = 0; let k2 = 1;
+      let b = decimal;
+      do {
+        const a = Math.floor(b);
+        const aux = h1;
+        h1 = a * h1 + h2;
+        h2 = aux;
+        const auxk = k1;
+        k1 = a * k1 + k2;
+        k2 = auxk;
+        const frac = h1 / k1;
+        if (Math.abs(frac - decimal) < tolerance) {
+          break;
+        }
+        b = 1 / (b - a);
+      } while (h1 / k1 !== decimal);
+
+      // Ограничение на знаменатель до 1000 для избежания слишком больших чисел
+      if (k1 > 1000) return null;
+
+      return `${h1}/${k1}`;
     }
   </script>
 </body>
